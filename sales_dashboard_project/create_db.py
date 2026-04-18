@@ -38,3 +38,24 @@ conn.close()
 # https://docs.python.org/3/library/sqlite3.html#sqlite3.Connection.close
 
 print("Database created and data inserted.")
+
+# Previewing first 5 rows
+print("First 5 rows of the dataset:")
+print(df.head())
+# 📚 References:
+# https://www.w3schools.com/python/pandas/ref_df_head.asp
+# https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.head.html
+
+# Showing column names
+print("Columns in dataset:")
+print(df.columns)
+# 📚 References:
+# https://www.w3schools.com/python/pandas/ref_df_columns.asp
+# https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.columns.html
+
+# Showing basic info about data types and missing values
+print("Basic info about data types and missing values:")
+print(df.info())
+# 📚 References:
+# https://www.w3schools.com/python/pandas/ref_df_info.asp
+# https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.info.html
