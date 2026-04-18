@@ -1,0 +1,40 @@
+import pandas as pd  # For handling imported CSV data
+import sqlite3       # For SQLite databases
+import os            # To avoid file reading errors
+
+# File path
+file_path = os.path.join("data", "closed_deals_01-01-17-04-2026.csv")
+# 📚 References: 
+# https://www.geeksforgeeks.org/python/python-os-path-join-method/
+# https://docs.python.org/3/library/os.path.html
+# https://stackoverflow.com/questions/7132861/how-can-i-create-a-full-path-to-a-file-from-parts-e-g-path-to-the-folder-name
+
+# Loading CSV into DataFrame
+df = pd.read_csv(file_path)
+# 📚 References:
+# https://pandas.pydata.org/docs/reference/api/pandas.read_csv.html
+# https://www.geeksforgeeks.org/pandas/python-read-csv-using-pandas-read_csv/
+# https://www.w3schools.com/python/pandas/pandas_csv.asp
+
+# Connecting to SQLite database (creates file if it doesn't exist)
+conn = sqlite3.connect("deals.db")
+# 📚 References:
+# https://docs.python.org/3/library/sqlite3.html
+# https://stackoverflow.com/questions/76571296/how-to-connect-to-sqlite-database-in-python
+# https://www.w3schools.com/python/ref_module_sqlite3.asp
+# https://www.geeksforgeeks.org/python/python-sqlite-connecting-to-database/
+
+# Adding DataFrame to SQL table named 'deals'
+df.to_sql("deals", conn, if_exists="replace", index=False)
+# 📚 References:
+# https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.to_sql.html
+# https://stackoverflow.com/questions/75047288/how-to-use-to-sql-in-pandas
+
+# Closing the database connection
+conn.close()
+# 📚 References:
+# https://stackoverflow.com/questions/3783238/python-database-connection-close
+# https://www.geeksforgeeks.org/python/how-to-close-connections-in-psycopg2-using-python/
+# https://docs.python.org/3/library/sqlite3.html#sqlite3.Connection.close
+
+print("Database created and data inserted.")
