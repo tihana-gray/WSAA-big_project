@@ -16,6 +16,23 @@ df = pd.read_csv(file_path)
 # https://www.geeksforgeeks.org/pandas/python-read-csv-using-pandas-read_csv/
 # https://www.w3schools.com/python/pandas/pandas_csv.asp
 
+# Converting 'Close Date' to datetime format
+df['Close Date'] = pd.to_datetime(df['Close Date'], errors='coerce')
+# 📚 References:
+# https://pandas.pydata.org/docs/reference/api/pandas.to_datetime.html
+# https://www.geeksforgeeks.org/pandas/python-pandas-to_datetime/
+# https://www.w3schools.com/python/pandas/pandas_cleaning_wrong_format.asp
+# https://stackoverflow.com/questions/73595231/pandas-to-datetime-doesnt-work-as-hoped-with-format-d-m-y
+
+# Converting 'Amount' to numeric format (removing any non-numeric characters)
+df['Amount'] = pd.to_numeric(df['Amount'], errors='coerce')
+# 📚 References:
+# https://pandas.pydata.org/docs/reference/api/pandas.to_numeric.html
+# https://www.geeksforgeeks.org/python/python-pandas-to_numeric-method/
+# https://www.w3schools.com/python/pandas/pandas_cleaning_wrong_format.asp
+# https://stackoverflow.com/questions/78349270/using-pandas-to-number-and-coerce-to-force-values-to-ints-and-still-not-working
+
+
 # Connecting to SQLite database (creates file if it doesn't exist)
 conn = sqlite3.connect("deals.db")
 # 📚 References:
