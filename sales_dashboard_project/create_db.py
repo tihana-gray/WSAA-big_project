@@ -17,12 +17,13 @@ df = pd.read_csv(file_path)
 # https://www.w3schools.com/python/pandas/pandas_csv.asp
 
 # Converting 'Close Date' to datetime format
-df['Close Date'] = pd.to_datetime(df['Close Date'], errors='coerce')
+df['Close Date'] = pd.to_datetime(df['Close Date'], dayfirst=True, errors='coerce')
 # 📚 References:
 # https://pandas.pydata.org/docs/reference/api/pandas.to_datetime.html
 # https://www.geeksforgeeks.org/pandas/python-pandas-to_datetime/
 # https://www.w3schools.com/python/pandas/pandas_cleaning_wrong_format.asp
 # https://stackoverflow.com/questions/73595231/pandas-to-datetime-doesnt-work-as-hoped-with-format-d-m-y
+# https://github.com/pandas-dev/pandas/issues/25143
 
 # Converting 'Amount' to numeric format (removing any non-numeric characters)
 df['Amount'] = pd.to_numeric(df['Amount'], errors='coerce')
