@@ -25,6 +25,14 @@ df['Close Date'] = pd.to_datetime(df['Close Date'], dayfirst=True, errors='coerc
 # https://stackoverflow.com/questions/73595231/pandas-to-datetime-doesnt-work-as-hoped-with-format-d-m-y
 # https://github.com/pandas-dev/pandas/issues/25143
 
+# Removing commas and any currency symbols before conversion
+df['Amount'] = df['Amount'].astype(str).str.replace(',', '').str.replace('€', '')
+# 📚 References:
+# https://www.geeksforgeeks.org/pandas/python-pandas-series-str-replace-to-replace-text-in-a-series/
+# https://pandas.pydata.org/docs/reference/api/pandas.Series.str.replace.html
+# https://stackoverflow.com/questions/57647372/can-you-use-the-pandas-df-str-replace-function-for-multiple-values
+# https://stackoverflow.com/questions/39125665/cannot-convert-string-to-float-in-pandas-valueerror
+
 # Converting 'Amount' to numeric format (removing any non-numeric characters)
 df['Amount'] = pd.to_numeric(df['Amount'], errors='coerce')
 # 📚 References:
@@ -33,6 +41,12 @@ df['Amount'] = pd.to_numeric(df['Amount'], errors='coerce')
 # https://www.w3schools.com/python/pandas/pandas_cleaning_wrong_format.asp
 # https://stackoverflow.com/questions/78349270/using-pandas-to-number-and-coerce-to-force-values-to-ints-and-still-not-working
 
+# Replacing missing values with 0 
+df['Amount'] = df['Amount'].fillna(0)
+# 📚 References:
+# https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.fillna.html
+# https://www.geeksforgeeks.org/python/python-pandas-dataframe-fillna-to-replace-null-values-in-dataframe/
+# https://www.w3schools.com/python/pandas/ref_df_fillna.asp
 
 # Connecting to SQLite database (creates file if it doesn't exist)
 conn = sqlite3.connect("deals.db")
