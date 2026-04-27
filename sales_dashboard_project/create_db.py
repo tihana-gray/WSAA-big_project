@@ -144,3 +144,34 @@ for row in results[:5]:
 
 # Closing connection
 conn.close()
+
+#---------------------------------
+# Showing only 'Closed Won' deals:
+# --------------------------------
+
+# Reconnecting to database
+conn = sqlite3.connect("deals.db")
+cursor = conn.cursor()
+
+# SQL query to filter only "Closed Won" deals
+query = """
+SELECT * FROM deals
+WHERE deal_stage LIKE '%Closed Won%'
+"""
+
+cursor.execute(query)
+
+results = cursor.fetchall()
+
+print("First 5 Closed Won deals:")
+
+for row in results[:5]:
+    print(row)
+
+    conn.close()
+    
+# 📚 References:
+    # https://www.geeksforgeeks.org/python/python-mysql-select-query/
+    # https://www.geeksforgeeks.org/python/sql-using-python/
+    # https://www.geeksforgeeks.org/sql/sql-select-query/
+    # https://www.w3schools.com/python/python_mysql_select.asp
