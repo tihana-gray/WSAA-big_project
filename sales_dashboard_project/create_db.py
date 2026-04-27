@@ -105,3 +105,20 @@ print(df.info())
 # 📚 References:
 # https://www.w3schools.com/python/pandas/ref_df_info.asp
 # https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.info.html
+
+
+#---------------------------------
+# Reading data back from database:
+# --------------------------------
+
+# Reconnecting to the database
+conn = sqlite3.connect("deals.db")
+
+# Creating cursor to execute SQL queries
+cursor = conn.cursor()
+# 📚 References:
+# https://docs.python.org/3/library/sqlite3.html#cursor-objects
+# https://stackoverflow.com/questions/6318126/why-do-you-need-to-create-a-cursor-when-querying-a-sqlite-database
+# https://www.geeksforgeeks.org/python/python-sqlite-cursor-object/
+
+
