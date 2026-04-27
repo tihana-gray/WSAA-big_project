@@ -48,6 +48,20 @@ df['Amount'] = df['Amount'].fillna(0)
 # https://www.geeksforgeeks.org/python/python-pandas-dataframe-fillna-to-replace-null-values-in-dataframe/
 # https://www.w3schools.com/python/pandas/ref_df_fillna.asp
 
+# Renaming columns to remove spaces and special characters for SQL compatibility
+df.columns = [
+    'close_date',
+    'deal_name',
+    'deal_id',
+    'deal_stage',
+    'amount',
+    'closed_amount',
+    'traffic_source'
+]
+# 📚 References:
+# https://medium.com/@analyticsmentor/sql-best-practices-e1c61e96ee27
+# https://stackoverflow.com/questions/5461481/formatting-clear-and-readable-sql-queries
+
 # Connecting to SQLite database (creates file if it doesn't exist)
 conn = sqlite3.connect("deals.db")
 # 📚 References:
