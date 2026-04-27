@@ -121,4 +121,26 @@ cursor = conn.cursor()
 # https://stackoverflow.com/questions/6318126/why-do-you-need-to-create-a-cursor-when-querying-a-sqlite-database
 # https://www.geeksforgeeks.org/python/python-sqlite-cursor-object/
 
+# SQL query to get all records from deals table
+query = "SELECT * FROM deals"
 
+# Executing query
+cursor.execute(query)
+# 📚 References:
+# https://www.geeksforgeeks.org/python/python-sqlite-cursor-object/
+# https://sibabalwesinyaniso.medium.com/what-is-a-cursor-understanding-how-sqlite-handles-queries-in-python-8f8c88546820
+
+# Getting all results
+results = cursor.fetchall()
+# 📚 References:
+# https://docs.python.org/3/library/sqlite3.html#sqlite3.Cursor.fetchall
+# https://sibabalwesinyaniso.medium.com/what-is-a-cursor-understanding-how-sqlite-handles-queries-in-python-8f8c88546820
+
+# Printing first 5 rows from database
+print("First 5 rows from database:")
+
+for row in results[:5]:
+        print(row)
+
+# Closing connection
+conn.close()
