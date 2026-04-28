@@ -175,3 +175,41 @@ for row in results[:5]:
     # https://www.geeksforgeeks.org/python/sql-using-python/
     # https://www.geeksforgeeks.org/sql/sql-select-query/
     # https://www.w3schools.com/python/python_mysql_select.asp
+
+
+# -------------------------------------------
+# Removing 'Closed Lost' deals from database:
+# -------------------------------------------
+
+# Reconnecting 
+conn = sqlite3.connect("deals.db")
+cursor = conn.cursor()
+
+# SQL query to delete all "Closed Lost" deals
+delete_query = """
+DELETE FROM deals
+WHERE deal_stage LIKE '%Closed Lost%'
+"""
+
+cursor.execute(delete_query)
+
+# Committing changes 
+conn.commit()
+# 📚 References:
+# https://docs.python.org/3/library/sqlite3.html#sqlite3.Connection.commit
+# https://www.geeksforgeeks.org/python/commit-rollback-operation-in-python/
+# https://stackoverflow.com/questions/2847999/why-the-need-to-commit-explicitly-when-doing-an-update
+
+print("Closed Lost deals deleted.")
+
+# Verifying deletion by counting remaining rows
+cursor.execute("SELECT COUNT(*) FROM deals")
+count = cursor.fetchone()[0] # Gets a row from the result inside a tuple, so we take the first element [0]
+# 📚 References:
+# https://dev.mysql.com/doc/connector-python/en/connector-python-api-mysqlcursor-fetchone.html
+# https://stackoverflow.com/questions/2511679/python-number-of-rows-affected-by-cursor-executeselect
+# https://mariadb.com/docs/connectors/mariadb-connector-python/api/cursor
+
+print("Remaining deals in database:", count)
+
+conn.close()
