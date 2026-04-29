@@ -25,13 +25,27 @@ def get_db_connection():
 # API route to get all deals
 @app.route('/deals', methods=['GET'])
 def get_deals():
-# 📚 References:
-# https://flask.palletsprojects.com/en/stable/quickstart/
-# https://www.geeksforgeeks.org/python/flask-app-routing/
-# https://www.sitepoint.com/flask-url-routing/
 
     conn = get_db_connection()
     cursor = conn.cursor()
 
     # SQL query to get all deals
     cursor.execute("SELECT * FROM deals")
+    
+    rows = cursor.fetchall()
+
+    # Converting rows to list of dictionaries
+    deals = [dict(row) for row in rows] 
+    # Loop through all rows converting each one to a dictionary and storing them in a list
+
+    conn.close()
+
+    return jsonify(deals)
+
+# 📚 References:
+# https://flask.palletsprojects.com/en/stable/quickstart/
+# https://www.geeksforgeeks.org/python/flask-app-routing/
+# https://www.sitepoint.com/flask-url-routing/
+# https://docs.python.org/3/library/sqlite3.html#sqlite3.Row
+# https://www.geeksforgeeks.org/python/use-jsonify-instead-of-json-dumps-in-flask/
+# https://www.geeksforgeeks.org/python/how-to-return-a-json-response-from-a-flask-api/
