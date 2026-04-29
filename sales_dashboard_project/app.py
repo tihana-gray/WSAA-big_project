@@ -20,3 +20,18 @@ def get_db_connection():
 # https://stackoverflow.com/questions/44009452/what-is-the-purpose-of-the-row-factory-method-of-an-sqlite3-connection-object
 # https://docs.python.org/3/library/sqlite3.html#sqlite3.Connection.row_factory
 # https://www.psycopg.org/psycopg3/docs/api/rows.html
+
+
+# API route to get all deals
+@app.route('/deals', methods=['GET'])
+def get_deals():
+# 📚 References:
+# https://flask.palletsprojects.com/en/stable/quickstart/
+# https://www.geeksforgeeks.org/python/flask-app-routing/
+# https://www.sitepoint.com/flask-url-routing/
+
+    conn = get_db_connection()
+    cursor = conn.cursor()
+
+    # SQL query to get all deals
+    cursor.execute("SELECT * FROM deals")

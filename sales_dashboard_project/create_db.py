@@ -213,3 +213,5 @@ count = cursor.fetchone()[0] # Gets a row from the result inside a tuple, so we 
 print("Remaining deals in database:", count)
 
 conn.close()
+
+
