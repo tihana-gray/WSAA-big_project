@@ -1,5 +1,6 @@
 from flask import Flask, jsonify  # Flask for API, jsonify to return JSON
 import sqlite3                    # Connecting to SQLite database
+import os
 
 # Create Flask app
 app = Flask(__name__)
@@ -11,8 +12,14 @@ app = Flask(__name__)
 
 # Connecting to the database
 def get_db_connection():
-    conn = sqlite3.connect("deals.db")
-    conn.row_factory = sqlite3.Row  # Pulls rows as dictionaries instead of tuples, making it easier to work with data
+    # Get absolute path to this file (app.py)
+    base_dir = os.path.dirname(os.path.abspath(__file__))
+
+    # Building path to deals.db
+    db_path = os.path.join(base_dir, "deals.db")
+
+    conn = sqlite3.connect(db_path)
+    conn.row_factory = sqlite3.Row
     return conn
 # 📚 References:
 # https://flask.palletsprojects.com/en/stable/patterns/sqlite3/
@@ -20,6 +27,9 @@ def get_db_connection():
 # https://stackoverflow.com/questions/44009452/what-is-the-purpose-of-the-row-factory-method-of-an-sqlite3-connection-object
 # https://docs.python.org/3/library/sqlite3.html#sqlite3.Connection.row_factory
 # https://www.psycopg.org/psycopg3/docs/api/rows.html
+# https://www.geeksforgeeks.org/python/python-os-path-abspath-method-with-example/
+# https://stackoverflow.com/questions/38412495/difference-between-os-path-dirnameos-path-abspath-file-and-os-path-dirnam
+# https://docs.python.org/3/library/os.path.html
 
 
 # API route to get all deals
