@@ -72,3 +72,9 @@ def get_closed_won_deals():
 
     return jsonify(deals)
 
+
+if __name__ == '__main__':
+    app.run(debug=True)
+# 📚 References:
+# https://flask-ptbr.readthedocs.io/en/latest/quickstart.html
+# https://www.geeksforgeeks.org/python/how-to-run-a-flask-application/
