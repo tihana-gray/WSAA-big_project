@@ -49,3 +49,26 @@ def get_deals():
 # https://docs.python.org/3/library/sqlite3.html#sqlite3.Row
 # https://www.geeksforgeeks.org/python/use-jsonify-instead-of-json-dumps-in-flask/
 # https://www.geeksforgeeks.org/python/how-to-return-a-json-response-from-a-flask-api/
+
+
+# Extracting only 'Close Won' deals
+@app.route('/deals/closedwon', methods=['GET'])
+def get_closed_won_deals():
+
+    conn = get_db_connection()
+    cursor = conn.cursor()
+
+    # SQL query to filter Closed Won deals only
+    cursor.execute("""
+    SELECT * FROM deals
+    WHERE deal_stage LIKE '%Closed Won%'
+    """)
+
+    rows = cursor.fetchall()
+
+    deals = [dict(row) for row in rows]
+
+    conn.close()
+
+    return jsonify(deals)
+
