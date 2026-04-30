@@ -1,6 +1,7 @@
 from flask import Flask, jsonify  # Flask for API, jsonify to return JSON
 import sqlite3                    # Connecting to SQLite database
 import os
+import webbrowser                 # 
 
 # Create Flask app
 app = Flask(__name__)
@@ -84,7 +85,13 @@ def get_closed_won_deals():
 
 
 if __name__ == '__main__':
+    webbrowser.open("http://127.0.0.1:5000/deals")
     app.run(debug=True)
 # 📚 References:
 # https://flask-ptbr.readthedocs.io/en/latest/quickstart.html
 # https://www.geeksforgeeks.org/python/how-to-run-a-flask-application/
+# https://realpython.com/ref/stdlib/webbrowser/
+# https://docs.python.org/3/library/webbrowser.html
+# https://www.geeksforgeeks.org/python/python-launch-a-web-browser-using-webbrowser-module/
+# https://stackoverflow.com/questions/5916270/pythons-webbrowser-launches-ie-instead-of-default-browser-on-windows-relative
+# https://www.w3schools.com/python/ref_module_webbrowser.asp
