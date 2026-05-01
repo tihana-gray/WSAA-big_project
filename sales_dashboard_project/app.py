@@ -95,3 +95,22 @@ if __name__ == '__main__':
 # https://www.geeksforgeeks.org/python/python-launch-a-web-browser-using-webbrowser-module/
 # https://stackoverflow.com/questions/5916270/pythons-webbrowser-launches-ie-instead-of-default-browser-on-windows-relative
 # https://www.w3schools.com/python/ref_module_webbrowser.asp
+
+
+# CREATING NEW DEAL
+
+@app.route('/deals', methods=['POST'])
+def add_deal():
+
+    new_deal = request.get_json()
+    
+    cursor.execute("""
+INSERT INTO deals (close_date, deal_name, deal_id, amount, closed_amount, traffic_source)
+""", (
+    new_deal['close_date'],
+    new_deal['deal_name'],
+    new_deal['deal_id'],
+    new_deal['amount'],
+    new_deal['closed_amount'],
+    new_deal['traffic_source']
+))
