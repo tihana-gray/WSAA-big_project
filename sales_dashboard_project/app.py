@@ -1,7 +1,7 @@
-from flask import Flask, jsonify  # Flask for API, jsonify to return JSON
-import sqlite3                    # Connecting to SQLite database
+from flask import Flask, jsonify, request  
+import sqlite3                 
 import os
-import webbrowser                 # 
+import webbrowser                 
 
 # Create Flask app
 app = Flask(__name__)
@@ -83,6 +83,47 @@ def get_closed_won_deals():
 
     return jsonify(deals)
 
+#------------------
+# CREATING NEW DEAL
+#------------------
+
+@app.route('/deals/add', methods=['POST'])
+def add_deal():
+
+    new_deal = request.get_json()
+
+    conn = get_db_connection()
+    cursor = conn.cursor()
+
+    cursor.execute("""
+    INSERT INTO deals
+    (close_date, deal_name, deal_id, deal_stage, amount, closed_amount, traffic_source)
+    VALUES (?, ?, ?, ?, ?, ?, ?)
+    """, (
+        new_deal['close_date'],
+        new_deal['deal_name'],
+        new_deal['deal_id'],
+        new_deal['deal_stage'],
+        new_deal['amount'],
+        new_deal['closed_amount'],
+        new_deal['traffic_source']
+    ))
+
+    conn.commit()
+    conn.close()
+    
+    return {"message": "Deal added successfully"}, 201
+
+    # 📚 References:
+        # https://flask.palletsprojects.com/en/latest/api/#flask.request
+        # https://www.w3schools.com/sql/sql_insert.asp
+        # https://www.geeksforgeeks.org/python/use-jsonify-instead-of-json-dumps-in-flask/
+        # https://stackoverflow.com/questions/76701777/posting-json-to-python-api-created-using-flask
+        # https://flask.palletsprojects.com/en/stable/api/
+        # https://stackoverflow.com/questions/55079926/do-i-need-to-use-methods-get-post-in-app-route
+        # https://www.geeksforgeeks.org/python/flask-http-methods-handle-get-post-requests/
+        # https://flask.palletsprojects.com/en/stable/quickstart/
+        
 
 if __name__ == '__main__':
     webbrowser.open("http://127.0.0.1:5000/deals")
@@ -96,33 +137,3 @@ if __name__ == '__main__':
 # https://stackoverflow.com/questions/5916270/pythons-webbrowser-launches-ie-instead-of-default-browser-on-windows-relative
 # https://www.w3schools.com/python/ref_module_webbrowser.asp
 
-#------------------
-# CREATING NEW DEAL
-#------------------
-
-@app.route('/deals', methods=['POST'])
-def add_deal():
-
-    new_deal = request.get_json()
-    
-    conn = get_db_connection()
-    cursor = conn.cursor()
-    
-    cursor.execute("""
-INSERT INTO deals (close_date, deal_name, deal_id, deal_stage, amount, closed_amount, traffic_source)
-""", (
-    new_deal['close_date'],
-    new_deal['deal_name'],
-    new_deal['deal_id'],
-    new_deal['deal_stage'],
-    new_deal['amount'],
-    new_deal['closed_amount'],
-    new_deal['traffic_source']
-))
-    
-    conn.commit()
-    conn.close()
-    
-# 📚 References:
-# https://flask.palletsprojects.com/en/latest/api/#flask.request
-# https://www.w3schools.com/sql/sql_insert.asp
