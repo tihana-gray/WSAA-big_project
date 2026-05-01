@@ -95,6 +95,20 @@ def add_deal():
     conn = get_db_connection()
     cursor = conn.cursor()
 
+# Checking if deal already exists
+    cursor.execute("SELECT * FROM deals WHERE deal_id = ?", (new_deal['deal_id'],))
+    existing = cursor.fetchone()
+
+    if existing:
+        conn.close()
+        return {"error": "Deal already exists"}, 400
+
+    # 📚 References:
+    # https://docs.python.org/3/library/sqlite3.html#sqlite3.Cursor.execute
+    # https://realpython.com/prevent-python-sql-injection/
+    # https://stackoverflow.com/questions/775296/mysql-parameterized-queries
+
+    # Inserting deal if it doesn't exist
     cursor.execute("""
     INSERT INTO deals
     (close_date, deal_name, deal_id, deal_stage, amount, closed_amount, traffic_source)
@@ -124,6 +138,31 @@ def add_deal():
         # https://www.geeksforgeeks.org/python/flask-http-methods-handle-get-post-requests/
         # https://flask.palletsprojects.com/en/stable/quickstart/
         
+
+#------------
+# DELETE DEAL
+#------------
+
+@app.route('/deals/delete/<int:deal_id>', methods=['DELETE'])
+def delete_deal(deal_id):
+
+    conn = get_db_connection()
+    cursor = conn.cursor()
+
+    cursor.execute("DELETE FROM deals WHERE deal_id = ?", (deal_id,))
+
+    conn.commit()
+    conn.close()
+
+    return {"message": "Deal deleted successfully"}
+
+# 📚 References:
+# https://www.w3schools.com/sql/sql_delete.asp
+# https://flask.palletsprojects.com/en/latest/api/#flask.request
+# https://stackoverflow.com/questions/61506681/python-flask-delete-request
+# https://www.youtube.com/watch?v=7jKsHOZk-IE
+
+
 
 if __name__ == '__main__':
     webbrowser.open("http://127.0.0.1:5000/deals")
