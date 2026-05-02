@@ -20,6 +20,8 @@ def get_db_connection():
     db_path = os.path.join(base_dir, "deals.db")
 
     conn = sqlite3.connect(db_path)
+    
+    # Returning rows as dictionaries instead of tuples
     conn.row_factory = sqlite3.Row
     return conn
 # 📚 References:
@@ -33,24 +35,28 @@ def get_db_connection():
 # https://docs.python.org/3/library/os.path.html
 
 
-# API route to get all deals
+# --------------
+# GET ALL DEALS
+#---------------
+
+# curl http://127.0.0.1:5000/deals
 @app.route('/deals', methods=['GET'])
 def get_deals():
 
     conn = get_db_connection()
     cursor = conn.cursor()
 
-    # SQL query to get all deals
+    # SQL query to get all deals from deals table
     cursor.execute("SELECT * FROM deals")
     
     rows = cursor.fetchall()
 
-    # Converting rows to list of dictionaries
+    # Converting rows to list of dictionaries for JSON formatting
     deals = [dict(row) for row in rows] 
-    # Loop through all rows converting each one to a dictionary and storing them in a list
 
     conn.close()
 
+    # Returning data as JSON
     return jsonify(deals)
 
 # 📚 References:
@@ -62,14 +68,18 @@ def get_deals():
 # https://www.geeksforgeeks.org/python/how-to-return-a-json-response-from-a-flask-api/
 
 
-# Extracting only 'Close Won' deals
+# ----------------------------------
+# EXTRACTING 'CLOSED WON' DEALS ONLY
+# ----------------------------------
+
+# curl http://127.0.0.1:5000/deals/closedwon
 @app.route('/deals/closedwon', methods=['GET'])
 def get_closed_won_deals():
 
     conn = get_db_connection()
     cursor = conn.cursor()
 
-    # SQL query to filter Closed Won deals only
+    # SQL query to filter 'Closed Won' deals only
     cursor.execute("""
     SELECT * FROM deals
     WHERE deal_stage LIKE '%Closed Won%'
@@ -87,15 +97,17 @@ def get_closed_won_deals():
 # CREATING NEW DEAL
 #------------------
 
+# curl -X POST -H "Content-Type: application/json" -d "{\"close_date\":\"2026-04-30\",\"deal_name\":\"Test Deal\",\"deal_id\":999999,\"deal_stage\":\"Closed Won\",\"amount\":5000,\"closed_amount\":5000,\"traffic_source\":\"Test\"}" http://127.0.0.1:5000/deals/add
 @app.route('/deals/add', methods=['POST'])
 def add_deal():
 
+    # JSON data gets sent in the request body
     new_deal = request.get_json()
 
     conn = get_db_connection()
     cursor = conn.cursor()
 
-# Checking if deal already exists
+    # Checking if deal already exists
     cursor.execute("SELECT * FROM deals WHERE deal_id = ?", (new_deal['deal_id'],))
     existing = cursor.fetchone()
 
@@ -108,7 +120,8 @@ def add_deal():
     # https://realpython.com/prevent-python-sql-injection/
     # https://stackoverflow.com/questions/775296/mysql-parameterized-queries
 
-    # Inserting deal if it doesn't exist
+
+    # Inserting deal in the database if it doesn't exist
     cursor.execute("""
     INSERT INTO deals
     (close_date, deal_name, deal_id, deal_stage, amount, closed_amount, traffic_source)
@@ -143,12 +156,14 @@ def add_deal():
 # DELETE DEAL
 #------------
 
+# # curl -X DELETE http://127.0.0.1:5000/deals/delete/999999
 @app.route('/deals/delete/<int:deal_id>', methods=['DELETE'])
 def delete_deal(deal_id):
 
     conn = get_db_connection()
     cursor = conn.cursor()
 
+    # Deleting specific deal based on deal_id
     cursor.execute("DELETE FROM deals WHERE deal_id = ?", (deal_id,))
 
     conn.commit()
@@ -162,6 +177,67 @@ def delete_deal(deal_id):
 # https://stackoverflow.com/questions/61506681/python-flask-delete-request
 # https://www.youtube.com/watch?v=7jKsHOZk-IE
 
+
+#-------------
+# UPDATE DEAL
+#-------------
+
+# curl -X PUT -H "Content-Type: application/json" -d "{\"close_date\":\"2026-05-01\",\"deal_name\":\"Updated Deal\",\"deal_stage\":\"Closed Won\",\"amount\":6000,\"closed_amount\":6000,\"traffic_source\":\"Updated\"}" http://127.0.0.1:5000/deals/update/999999
+@app.route('/deals/update/<int:deal_id>', methods=['PUT'])
+def update_deal(deal_id):
+
+    # Getting updated data from request
+    updated_data = request.get_json()
+
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    
+    # Updating existing deal with parameterised SQL query
+    cursor.execute("""
+UPDATE deals
+SET close_date = ?,
+deal_name = ?,
+deal_stage = ?,
+amount = ?,
+closed_amount = ?,
+traffic_source = ?
+WHERE deal_id = ?                                               
+""", (
+    updated_data['close_date'],
+    updated_data['deal_name'],
+    updated_data['deal_stage'],
+    updated_data['amount'],
+    updated_data['closed_amount'],
+    updated_data['traffic_source'],
+    deal_id 
+))
+    # Without WHERE clause all records would be updated
+
+    # Checking if anything was updated
+    if cursor.rowcount == 0:
+        conn.close()
+        return {"error": "Deal not found"}, 404
+
+    conn.commit()
+    conn.close()
+
+    return {"message": "Deal updated successfully"}
+
+
+# 📚 References:
+# https://www.w3schools.com/sql/sql_parameterized_queries.asp
+# https://explore-flask.readthedocs.io/en/latest/views.html
+# https://www.w3schools.com/python/python_mysql_update.asp
+# https://www.psycopg.org/docs/cursor.html
+# https://dev.mysql.com/doc/connector-python/en/connector-python-api-mysqlcursor-rowcount.html
+# https://stackoverflow.com/questions/51657427/python-mysql-using-cursor-rowcount-before-and-after-inserting-a-row
+# https://iamjeremie.me/post/2025-02/parsing-json-payload-on-rest-api-call-with-flask/
+# https://codesignal.com/learn/courses/mastering-flask-http-methods/lessons/updating-data-with-put-requests
+# https://medium.com/@obotnt/understanding-the-difference-between-get-json-and-request-json-in-flask-d612d1fbc895
+# https://www.w3schools.com/sql/sql_parameterized_queries.asp
+# https://stackoverflow.com/questions/4712037/what-is-parameterized-query
+# https://www.psycopg.org/psycopg3/docs/basic/params.html
+# https://stackoverflow.com/questions/775296/mysql-parameterized-queries
 
 
 if __name__ == '__main__':
