@@ -8,13 +8,42 @@
 <h1>Deals Dashboard</h1>
 
 <button onclick="getDeals()">Load Deals</button>
-
-<!-- 📚 References:
+<!-- This button calls the JavaScript function getDeals() when clicked. 
+It triggers a GET request to the Flask API.
+📚 References:
 # https://www.w3schools.com/jsref/event_onclick.asp
 # https://www.w3schools.com/tags/ev_onclick.asp
 # https://www.geeksforgeeks.org/javascript/javascript-onclick-event/
 -->
 
+<ul id="dealList"></ul>
+<!-- This unordered list displays deals.
+Each deal is added as a list item with JavaScript.
+📚 References:
+# https://www.w3schools.com/html/html_lists.asp
+# https://www.w3schools.com/tags/tag_ul.asp
+# https://www.w3schools.com/html/html_lists.asp
+# https://www.dofactory.com/html/ul/id
+-->
+<hr>
+
+
+<h2>Add Deal</h2>
+
+
 <input id="deal_name" placeholder="Deal Name">
 <input id="deal_id" placeholder="Deal ID">
 <input id="amount" placeholder="Amount">
+<!-- Input fields allow to enter deal data.
+📚 References:
+ # https://www.w3schools.com/html/html_form_input_types.asp
+ # https://www.w3schools.com/hTml/html_id.asp
+ # https://stackoverflow.com/questions/7470268/html-input-name-vs-id
+ # https://github.com/andrewbeattycourseware/wsaa-courseware/blob/main/code/Topic08-generated-client/staticpages/index.html
+ -->
+
+ <button onclick="addDeal()">Add Deal</button>
+ <!-- addDeal() sends POST request to API.
+ 📚 References:
+ # https://www.w3schools.com/jsref/event_onclick.asp
+ # https://stackoverflow.com/questions/66341496/create-an-html-button-that-works-as-a-link-with-an-onclick
