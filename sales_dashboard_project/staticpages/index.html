@@ -97,7 +97,7 @@ It retrieves all deals and displays them list.
 # Loop through deals
 # Create <li> elements dynamically
 
-📚 References
+📚 References:
 # https://mimo.org/glossary/javascript/comment
 # https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API
 # https://developer.mozilla.org/en-US/docs/Web/API/Response/json
@@ -109,5 +109,37 @@ It retrieves all deals and displays them list.
 # https://www.w3schools.com/jsref/dom_obj_li.asp
 # https://medium.com/@sonia277cse/javascript-and-the-dom-part-4-creating-appending-removing-elements-71918912db0f
 */
+
+////////////////
+// ADD DEAL
+////////////////
+
+function addDeal() {
+
+    let name = document.getElementById('deal_name').value;
+    let id = document.getElementById('deal_id').value;
+    let amount = document.getElementById('amount').value;
+
+    fetch('/deals/add', {
+    method: 'POST',
+    headers: {
+        'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+        deal_name: name,
+        deal_id: parseFloat(id),
+        
+    })
+});
+
+/*    
+📚 References:
+# https://www.w3schools.com/JSREF/met_document_getelementbyid.asp
+# https://www.geeksforgeeks.org/html/html-dom-getelementbyid-method/
+# https://stackoverflow.com/questions/7699485/document-getelementbyid
+# https://www.youtube.com/watch?v=jjekaDdh2GE
+# https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API
+# https://www.w3schools.com/jsref/jsref_parsefloat.asp
+# https://www.geeksforgeeks.org/javascript/javascript-number-parsefloat-method/
 
 </script>
