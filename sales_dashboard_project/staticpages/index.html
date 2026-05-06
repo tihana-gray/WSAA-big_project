@@ -44,6 +44,70 @@ Each deal is added as a list item with JavaScript.
 
  <button onclick="addDeal()">Add Deal</button>
  <!-- addDeal() sends POST request to API.
+ It sends a POST request with JSON data to the Flask API.
  📚 References:
  # https://www.w3schools.com/jsref/event_onclick.asp
  # https://stackoverflow.com/questions/66341496/create-an-html-button-that-works-as-a-link-with-an-onclick
+ -->
+
+ <hr>
+
+
+ <!-- DELETE DEAL SECTION -->
+
+ <h2>Delete Deal</h2>
+ 
+<input id="delete_id" placeholder="Deal ID">
+
+<button onclick="deleteDeal()">Delete</button>
+<!-- This button calls deleteDeal() function.
+It sends a DELETE request to the Flask API using deal_id.
+📚 References:
+# https://restfulapi.net/http-methods/
+# https://stackoverflow.com/questions/56531549/delete-element-that-called-onclick
+# https://forum.freecodecamp.org/t/make-delete-and-edit-buttons-work/555493
+-->
+
+<script>
+//////////////////////
+//GET DEALS
+/////////////////////
+
+function getDeals() {
+    fetch('/deals')
+    .then(response => response.json())
+    .then(data => {
+        let list = document.getElementById('dealList');
+        list.innerHTML = '';
+
+        for (let i = 0; i < data.length; i++) {
+
+            let li = document.createElement("li");
+            li.innerText = data[i].deal_name;
+
+            list.appendChild(li);
+        }
+    });
+
+/*
+This function sends a GET request to the Flask API.
+It retrieves all deals and displays them list.
+# fetch() sends request
+# Convert response to JSON
+# Loop through deals
+# Create <li> elements dynamically
+
+📚 References
+# https://mimo.org/glossary/javascript/comment
+# https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API
+# https://developer.mozilla.org/en-US/docs/Web/API/Response/json
+# https://www.geeksforgeeks.org/javascript/why-we-use-then-method-in-javascript/
+# https://stackoverflow.com/questions/56976581/how-to-get-data-out-of-then-function
+# https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise/then
+# https://www.geeksforgeeks.org/html/html-dom-li-object/
+# https://www.w3schools.com/js/js_loop_for.asp
+# https://www.w3schools.com/jsref/dom_obj_li.asp
+# https://medium.com/@sonia277cse/javascript-and-the-dom-part-4-creating-appending-removing-elements-71918912db0f
+*/
+
+</script>
