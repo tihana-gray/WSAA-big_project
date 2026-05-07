@@ -121,18 +121,26 @@ function addDeal() {
     let amount = document.getElementById('amount').value;
 
     fetch('/deals/add', {
-    method: 'POST',
-    headers: {
-        'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({
-        deal_name: name,
-        deal_id: parseFloat(id),
-        
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({
+            close_date: "2026-05-01",
+            deal_name: name,
+            deal_id: parseInt(id),
+            deal_stage: "Closed Won",
+            amount: parseFloat(amount),
+            closed_amount: 0,
+            traffic_source: "Web"
+        })
     })
-});
+    .then(response => response.json())
+    .then(data => alert(data.message));
+}
 
-/*    
+/*   
+This sends a POST request to the API.
+It collects input values and sends them as JSON.
+
 📚 References:
 # https://www.w3schools.com/JSREF/met_document_getelementbyid.asp
 # https://www.geeksforgeeks.org/html/html-dom-getelementbyid-method/
@@ -141,5 +149,12 @@ function addDeal() {
 # https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API
 # https://www.w3schools.com/jsref/jsref_parsefloat.asp
 # https://www.geeksforgeeks.org/javascript/javascript-number-parsefloat-method/
+# https://www.w3schools.com/js/js_json_stringify.asp
+# https://stackoverflow.com/questions/31190885/json-stringify-a-set
+# https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON/stringify
+# https://medium.com/@pmzubar/why-json-parse-json-stringify-is-a-bad-practice-to-clone-an-object-in-javascript-b28ac5e36521
+# https://www.geeksforgeeks.org/python/response-json-python-requests/
+# https://stackoverflow.com/questions/37555031/why-does-json-return-a-promise-but-not-when-it-passes-through-then
+# https://developer.mozilla.org/en-US/docs/Web/API/Response/json
 
 </script>
