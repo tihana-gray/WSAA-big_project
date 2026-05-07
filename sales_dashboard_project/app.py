@@ -1,4 +1,5 @@
 from flask import Flask, jsonify, request  
+from flask import send_from_directory
 import sqlite3                 
 import os
 import webbrowser                 
@@ -10,6 +11,9 @@ app = Flask(__name__)
 # https://flask.palletsprojects.com/en/stable/tutorial/factory/
 # https://www.geeksforgeeks.org/python/why-do-we-pass-__name__-to-the-flask-class/
 # https://stackoverflow.com/questions/61926327/how-does-app-flask-name-works-exactly-in-a-flask-application
+# https://stackoverflow.com/questions/17681762/unable-to-retrieve-files-from-send-from-directory-in-flask
+# https://flask.palletsprojects.com/en/stable/api/
+# https://tedboy.github.io/flask/generated/flask.send_from_directory.html
 
 # Connecting to the database
 def get_db_connection():
@@ -38,6 +42,10 @@ def get_db_connection():
 # --------------
 # GET ALL DEALS
 #---------------
+
+@app.route('/')
+def serve_index():
+    return send_from_directory('staticpages', 'index.html')
 
 # curl http://127.0.0.1:5000/deals
 @app.route('/deals', methods=['GET'])
@@ -241,8 +249,9 @@ WHERE deal_id = ?
 
 
 if __name__ == '__main__':
-    webbrowser.open("http://127.0.0.1:5000/deals")
+    webbrowser.open("http://127.0.0.1:5000/")
     app.run(debug=True)
+    
 # 📚 References:
 # https://flask-ptbr.readthedocs.io/en/latest/quickstart.html
 # https://www.geeksforgeeks.org/python/how-to-run-a-flask-application/

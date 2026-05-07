@@ -74,7 +74,7 @@ It sends a DELETE request to the Flask API using deal_id.
 /////////////////////
 
 function getDeals() {
-    fetch('/deals')
+    fetch('http://127.0.0.1:5000/deals')
     .then(response => response.json())
     .then(data => {
         let list = document.getElementById('dealList');
@@ -88,7 +88,7 @@ function getDeals() {
             list.appendChild(li);
         }
     });
-
+}
 /*
 This function sends a GET request to the Flask API.
 It retrieves all deals and displays them list.
@@ -156,8 +156,8 @@ fetch('/deals/delete/' + id, {
 .then(response => response.json())
 .then(data => alert(data.message));
 }
+/*This function sends a DELETE request to the API.
 
-/*
 📚 References:
 # https://www.w3schools.com/JSREF/met_document_getelementbyid.asp
 # https://www.geeksforgeeks.org/html/html-dom-getelementbyid-method/
@@ -177,3 +177,6 @@ fetch('/deals/delete/' + id, {
 
 
 </script>
+
+</body>
+</html>
