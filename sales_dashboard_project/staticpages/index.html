@@ -140,7 +140,24 @@ function addDeal() {
 /*   
 This sends a POST request to the API.
 It collects input values and sends them as JSON.
+*/
 
+////////////////
+//DELETE DEAL
+////////////////
+
+function deleteDeal() {
+
+let id = document.getElementById('delete_id').value;
+
+fetch('/deals/delete/' + id, {
+    method: 'DELETE'
+})
+.then(response => response.json())
+.then(data => alert(data.message));
+}
+
+/*
 📚 References:
 # https://www.w3schools.com/JSREF/met_document_getelementbyid.asp
 # https://www.geeksforgeeks.org/html/html-dom-getelementbyid-method/
@@ -156,5 +173,7 @@ It collects input values and sends them as JSON.
 # https://www.geeksforgeeks.org/python/response-json-python-requests/
 # https://stackoverflow.com/questions/37555031/why-does-json-return-a-promise-but-not-when-it-passes-through-then
 # https://developer.mozilla.org/en-US/docs/Web/API/Response/json
+*/
+
 
 </script>
