@@ -134,9 +134,10 @@ function addDeal() {
         })
     })
     .then(response => response.json())
-    .then(data => alert(data.message));
+    .then(data => {
+        alert(data.message);getDeals(); // reloading list after adding
+});
 }
-
 /*   
 This sends a POST request to the API.
 It collects input values and sends them as JSON.
@@ -154,7 +155,10 @@ fetch('/deals/delete/' + id, {
     method: 'DELETE'
 })
 .then(response => response.json())
-.then(data => alert(data.message));
+.then(data => {
+    alert(data.message);
+    getDeals(); // reload list after deleting
+});
 }
 /*This function sends a DELETE request to the API.
 
@@ -173,6 +177,9 @@ fetch('/deals/delete/' + id, {
 # https://www.geeksforgeeks.org/python/response-json-python-requests/
 # https://stackoverflow.com/questions/37555031/why-does-json-return-a-promise-but-not-when-it-passes-through-then
 # https://developer.mozilla.org/en-US/docs/Web/API/Response/json
+# https://www.geeksforgeeks.org/javascript/how-to-use-the-alert-method-in-javascript/
+# https://developer.mozilla.org/en-US/docs/Web/API/Window/alert
+# https://stackoverflow.com/questions/64681120/fetch-then-does-not-return-data
 */
 
 
