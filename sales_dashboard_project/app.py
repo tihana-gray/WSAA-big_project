@@ -4,7 +4,11 @@ import sqlite3
 import os
 import webbrowser                 
 
-# Create Flask app
+
+# -------------------
+# CREATING FLASK APP
+#--------------------
+
 app = Flask(__name__)
 
 # 📚 References:
@@ -23,11 +27,15 @@ def get_db_connection():
     # Building path to deals.db
     db_path = os.path.join(base_dir, "deals.db")
 
+    # Connection to SQLie database
     conn = sqlite3.connect(db_path)
     
     # Returning rows as dictionaries instead of tuples
     conn.row_factory = sqlite3.Row
+    
+    # Returning connection object
     return conn
+
 # 📚 References:
 # https://flask.palletsprojects.com/en/stable/patterns/sqlite3/
 # https://zetcode.com/python/sqlite3-connection-row-factory/
@@ -43,25 +51,29 @@ def get_db_connection():
 # GET ALL DEALS
 #---------------
 
+# Loading index.html: curl http://127.0.0.1:5000/
 @app.route('/')
 def serve_index():
-    return send_from_directory('staticpages', 'index.html')
+    return send_from_directory('staticpages', 'index.html') # Sending index.html file from 'staticpages' folder to browser
+
 
 # curl http://127.0.0.1:5000/deals
 @app.route('/deals', methods=['GET'])
 def get_deals():
 
-    conn = get_db_connection()
-    cursor = conn.cursor()
+    conn = get_db_connection()  # opens DB connection
+    cursor = conn.cursor()      # creates cursor
 
     # SQL query to get all deals from deals table
     cursor.execute("SELECT * FROM deals")
     
+    # Getting all results
     rows = cursor.fetchall()
 
     # Converting rows to list of dictionaries for JSON formatting
     deals = [dict(row) for row in rows] 
 
+    # Closing connection
     conn.close()
 
     # Returning data as JSON
@@ -80,9 +92,9 @@ def get_deals():
 # EXTRACTING 'CLOSED WON' DEALS ONLY
 # ----------------------------------
 
-# curl http://127.0.0.1:5000/deals/closedwon
+# Only 'Closed Won' deals: curl http://127.0.0.1:5000/deals/closedwon
 @app.route('/deals/closedwon', methods=['GET'])
-def get_closed_won_deals():
+def get_closed_won_deals(): # Filtering deals
 
     conn = get_db_connection()
     cursor = conn.cursor()
@@ -93,9 +105,9 @@ def get_closed_won_deals():
     WHERE deal_stage LIKE '%Closed Won%'
     """)
 
-    rows = cursor.fetchall()
+    rows = cursor.fetchall() # Gets filtered results
 
-    deals = [dict(row) for row in rows]
+    deals = [dict(row) for row in rows] # Converting rows to dictionaries
 
     conn.close()
 
@@ -105,9 +117,10 @@ def get_closed_won_deals():
 # CREATING NEW DEAL
 #------------------
 
+# Adding new deal
 # curl -X POST -H "Content-Type: application/json" -d "{\"close_date\":\"2026-04-30\",\"deal_name\":\"Test Deal\",\"deal_id\":999999,\"deal_stage\":\"Closed Won\",\"amount\":5000,\"closed_amount\":5000,\"traffic_source\":\"Test\"}" http://127.0.0.1:5000/deals/add
 @app.route('/deals/add', methods=['POST'])
-def add_deal():
+def add_deal(): # Function to insert a deal
 
     # JSON data gets sent in the request body
     new_deal = request.get_json()
@@ -117,8 +130,9 @@ def add_deal():
 
     # Checking if deal already exists
     cursor.execute("SELECT * FROM deals WHERE deal_id = ?", (new_deal['deal_id'],))
-    existing = cursor.fetchone()
+    existing = cursor.fetchone() # Giving results for the above
 
+    # If deal already exists this part returns error response
     if existing:
         conn.close()
         return {"error": "Deal already exists"}, 400
@@ -164,9 +178,9 @@ def add_deal():
 # DELETE DEAL
 #------------
 
-# # curl -X DELETE http://127.0.0.1:5000/deals/delete/999999
+# Delete deal:  curl -X DELETE http://127.0.0.1:5000/deals/delete/999999
 @app.route('/deals/delete/<int:deal_id>', methods=['DELETE'])
-def delete_deal(deal_id):
+def delete_deal(deal_id): # Taking deal_id from URL
 
     conn = get_db_connection()
     cursor = conn.cursor()
@@ -191,8 +205,8 @@ def delete_deal(deal_id):
 #-------------
 
 # curl -X PUT -H "Content-Type: application/json" -d "{\"close_date\":\"2026-05-01\",\"deal_name\":\"Updated Deal\",\"deal_stage\":\"Closed Won\",\"amount\":6000,\"closed_amount\":6000,\"traffic_source\":\"Updated\"}" http://127.0.0.1:5000/deals/update/999999
-@app.route('/deals/update/<int:deal_id>', methods=['PUT'])
-def update_deal(deal_id):
+@app.route('/deals/update/<int:deal_id>', methods=['PUT']) # Route for updating
+def update_deal(deal_id):  # Getting deal_id from URL
 
     # Getting updated data from request
     updated_data = request.get_json()
@@ -204,11 +218,11 @@ def update_deal(deal_id):
     cursor.execute("""
 UPDATE deals
 SET close_date = ?,
-deal_name = ?,
-deal_stage = ?,
-amount = ?,
-closed_amount = ?,
-traffic_source = ?
+    deal_name = ?,
+    deal_stage = ?,
+    amount = ?,
+    closed_amount = ?,
+    traffic_source = ?
 WHERE deal_id = ?                                               
 """, (
     updated_data['close_date'],
@@ -221,7 +235,7 @@ WHERE deal_id = ?
 ))
     # Without WHERE clause all records would be updated
 
-    # Checking if anything was updated
+    # Checking if anything was updated (if no rows updated 'deal not found')
     if cursor.rowcount == 0:
         conn.close()
         return {"error": "Deal not found"}, 404
@@ -229,7 +243,7 @@ WHERE deal_id = ?
     conn.commit()
     conn.close()
 
-    return {"message": "Deal updated successfully"}
+    return {"message": "Deal updated successfully"} # If succesful
 
 
 # 📚 References:
@@ -248,6 +262,7 @@ WHERE deal_id = ?
 # https://stackoverflow.com/questions/775296/mysql-parameterized-queries
 
 
+# Running application
 if __name__ == '__main__':
     webbrowser.open("http://127.0.0.1:5000/")
     app.run(debug=True)
