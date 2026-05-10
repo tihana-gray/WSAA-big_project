@@ -78,6 +78,24 @@ Each deal is added as a list item with JavaScript.
 -->
 <hr>
 
+<h2>Filter by Traffic Source</h2> 
+
+<select id="sourceDropdown"></select> 
+
+<button onclick="getDealsBySource()">Filter</button> 
+
+<!--
+This section filters deals by traffic source.
+It loads unique sources into a dropdown and filters results when selected.
+
+📚 References:
+# https://www.w3schools.com/tags/tag_select.asp
+# https://developer.mozilla.org/en-US/docs/Web/HTML/Element/select
+# https://www.w3schools.com/jsref/dom_obj_select.asp
+# https://stackoverflow.com/questions/19728666/drop-down-box-dependent-on-the-option-selected-in-another-drop-down-box
+# https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/select
+# https://www.w3schools.com/howto/howto_js_filter_dropdown.asp
+-->
 
 <h2>Add Deal</h2>
 
@@ -150,19 +168,16 @@ function getDeals() {
         for (let i = 0; i < data.length; i++) {
 
             let li = document.createElement("li");
-            li.innerText = data[i].deal_name;
+            li.innerText = data[i].deal_id + " - " + data[i].deal_name + " - €" + data[i].amount;
 
             list.appendChild(li);
         }
     });
 }
 /*
-This function sends a GET request to the Flask API.
-It retrieves all deals and displays them list.
-# fetch() sends request
-# Convert response to JSON
-# Loop through deals
-# Create <li> elements dynamically
+This function gets all deals from the Flask API and converts the response to JSON.
+It clears the list and loops through each deal.
+Then it creates <li> elements to display the deal ID, name, and amount.
 
 📚 References:
 # https://mimo.org/glossary/javascript/comment
@@ -175,6 +190,8 @@ It retrieves all deals and displays them list.
 # https://www.w3schools.com/js/js_loop_for.asp
 # https://www.w3schools.com/jsref/dom_obj_li.asp
 # https://medium.com/@sonia277cse/javascript-and-the-dom-part-4-creating-appending-removing-elements-71918912db0f
+# https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/innerText
+# https://www.w3schools.com/jsref/prop_node_innertext.asp
 */
 
 ////////////////
@@ -258,7 +275,76 @@ fetch('/deals/update/' + id, {
 });
 }
 
+//////////////////////
+// LOADING SOURCES
+//////////////////////
+
+function loadSources() { 
+    console.log("loadSources running");
+    fetch('http://127.0.0.1:5000/deals')
+    .then(response => response.json())
+    .then(data => {
+
+        let dropdown = document.getElementById('sourceDropdown');
+
+        let sources = [];
+
+        for (let i = 0; i < data.length; i++) {
+
+            if (!sources.includes(data[i].traffic_source)) {
+                sources.push(data[i].traffic_source);
+            }
+        }
+
+        dropdown.innerHTML = ""; // clearing existing options
+
+        for (let i = 0; i < sources.length; i++) {
+
+            let option = document.createElement("option");
+            option.value = sources[i];
+            option.text = sources[i];
+
+            dropdown.appendChild(option);
+        }
+    });
+}
 /*
+This function gets all traffic sources from the API.
+It removes duplicates and fills the dropdown menu dynamically.*/
+
+//////////////////////////////
+// FILTER BY SOURCE
+//////////////////////////////
+
+function getDealsBySource() { 
+
+    let source = document.getElementById('sourceDropdown').value;
+
+    fetch('http://127.0.0.1:5000/deals')
+    .then(response => response.json())
+    .then(data => {
+
+        let list = document.getElementById('dealList');
+        list.innerHTML = '';
+
+        for (let i = 0; i < data.length; i++) {
+
+            if (data[i].traffic_source === source) {
+
+                let li = document.createElement("li");
+                li.innerText = data[i].deal_id + " - " + data[i].deal_name + " - €" + data[i].amount;
+
+                list.appendChild(li);
+            }
+        }
+    });
+}
+
+/*
+This function filters deals based on selected traffic source.
+It loops through all deals and only displays matching ones.
+
+
 📚 References:
 # https://www.w3schools.com/JSREF/met_document_getelementbyid.asp
 # https://www.geeksforgeeks.org/html/html-dom-getelementbyid-method/
@@ -277,8 +363,10 @@ fetch('/deals/update/' + id, {
 # https://www.geeksforgeeks.org/javascript/how-to-use-the-alert-method-in-javascript/
 # https://developer.mozilla.org/en-US/docs/Web/API/Window/alert
 # https://stackoverflow.com/questions/64681120/fetch-then-does-not-return-data
+# https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API
+# https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/includes
+# https://www.w3schools.com/js/js_arrays.asp
 */
-
 
 
 </script>
