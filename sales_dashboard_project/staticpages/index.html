@@ -119,7 +119,23 @@ It sends a DELETE request to the Flask API using deal_id.
 # https://forum.freecodecamp.org/t/make-delete-and-edit-buttons-work/555493
 -->
 
+<!-- UPDATE DEAL SECTION -->
+
+<hr>
+
+<h2>Update Deal</h2>
+
+<input id="update_id" placeholder="Deal ID">
+<input id="update_name" placeholder="New Deal Name">
+<input id="update_amount" placeholder="New Amount">
+
+<button onclick="updateDeal()">Update Deal</button>
+<!-- This part updates an existing deal.
+It sends a PUT request to the Flask API.
+-->
+
 <script>
+
 //////////////////////
 //GET DEALS
 /////////////////////
@@ -192,12 +208,12 @@ function addDeal() {
 /*   
 This sends a POST request to the API.
 It collects input values and sends them as JSON.
-*/
+
 
 ////////////////
 //DELETE DEAL
 ////////////////
-
+*/
 function deleteDeal() {
 
 let id = document.getElementById('delete_id').value;
@@ -211,8 +227,38 @@ fetch('/deals/delete/' + id, {
     getDeals(); // reload list after deleting
 });
 }
-/*This function sends a DELETE request to the API.
+/* This function sends a DELETE request to the API.*/
 
+////////////////
+//UPDATE DEAL
+////////////////
+
+function updateDeal() {
+
+let id = document.getElementById('update_id').value;
+let name = document.getElementById('update_name').value;
+let amount = document.getElementById('update_amount').value;
+
+fetch('/deals/update/' + id, {
+    method: 'PUT',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({
+        close_date: "2026-05-01",
+        deal_name: name,
+        deal_stage: "Closed Won",
+        amount: parseFloat(amount),
+        closed_amount: 0,
+        traffic_source: "Web"
+    })
+})
+.then(response => response.json())
+.then(data => {
+    alert(data.message);
+    getDeals();
+});
+}
+
+/*
 📚 References:
 # https://www.w3schools.com/JSREF/met_document_getelementbyid.asp
 # https://www.geeksforgeeks.org/html/html-dom-getelementbyid-method/
@@ -232,6 +278,7 @@ fetch('/deals/delete/' + id, {
 # https://developer.mozilla.org/en-US/docs/Web/API/Window/alert
 # https://stackoverflow.com/questions/64681120/fetch-then-does-not-return-data
 */
+
 
 
 </script>
