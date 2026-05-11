@@ -87,6 +87,7 @@ Each deal is added as a list item with JavaScript.
 <!--
 This section filters deals by traffic source.
 It loads unique sources into a dropdown and filters results when selected.
+Traffic sources are executed from the database.
 
 📚 References:
 # https://www.w3schools.com/tags/tag_select.asp
@@ -95,6 +96,8 @@ It loads unique sources into a dropdown and filters results when selected.
 # https://stackoverflow.com/questions/19728666/drop-down-box-dependent-on-the-option-selected-in-another-drop-down-box
 # https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/select
 # https://www.w3schools.com/howto/howto_js_filter_dropdown.asp
+# https://stackoverflow.com/questions/59145094/how-to-create-a-filtering-function-when-button-is-clicked
+# https://www.freecodecamp.org/news/html-button-onclick-javascript-click-event-tutorial/
 -->
 
 <h2>Add Deal</h2>
@@ -291,10 +294,10 @@ function loadSources() {
 
         for (let i = 0; i < data.length; i++) {
 
-            if (!sources.includes(data[i].traffic_source)) {
+            if (data[i].traffic_source && !sources.includes(data[i].traffic_source)) {
                 sources.push(data[i].traffic_source);
             }
-        }
+        }    
 
         dropdown.innerHTML = ""; // clearing existing options
 
@@ -309,7 +312,7 @@ function loadSources() {
     });
 }
 /*
-This function gets all traffic sources from the API.
+This function gets all all deals and extracts traffic sources from the API.
 It removes duplicates and fills the dropdown menu dynamically.*/
 
 //////////////////////////////
@@ -329,7 +332,7 @@ function getDealsBySource() {
 
         for (let i = 0; i < data.length; i++) {
 
-            if (data[i].traffic_source === source) {
+            if (data[i].traffic_source && data[i].traffic_source.trim().toLowerCase() === source.trim().toLowerCase()) {
 
                 let li = document.createElement("li");
                 li.innerText = data[i].deal_id + " - " + data[i].deal_name + " - €" + data[i].amount;
@@ -366,9 +369,19 @@ It loops through all deals and only displays matching ones.
 # https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API
 # https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/includes
 # https://www.w3schools.com/js/js_arrays.asp
+# https://developer.mozilla.org/en-US/docs/Web/API/Node/appendChild
+# https://stackoverflow.com/questions/58718803/using-string-trim-and-tolowercase-methods-in-a-single-array-map-method-not-works
 */
 
-
+window.onload = function() {
+    loadSources();
+};
+/*
+📚 References:
+# https://stackoverflow.com/questions/9642823/force-a-window-onload-event-in-javascript
+# https://www.w3schools.com/jsref/event_onload.asp
+# https://developer.mozilla.org/en-US/docs/Web/API/Window/load_event
+*/
 </script>
 
 </body>
