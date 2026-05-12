@@ -4,22 +4,24 @@
 
 ---
 
-## Overview
+## 📝 Overview
 
-This project is a full-stack web application developed as part of the Web Services and Applications module.
+This project is a full-stack web application built using Python, Flask, SQLite, HTML, CSS, and JavaScript.
 
-It demonstrates how to:
+The application processes sales deal data from a CSV file, stores it in a SQLite database, and displays the information through a web dashboard interface.
 
-- Process raw CSV data using `Python`
-- Store and manage data in a `SQLite` database
-- Build a `RESTful API` using `Flask`
-- Create a frontend using `HTML`, `CSS`, and `JavaScript`
-- Perform full CRUD operations 
-- Filter and display data
+The project demonstrates:
+
+- CSV data processing using `pandas`
+- Database creation and management using `SQLite`
+- Backend API development using `Flask`
+- Frontend development using `HTML`, `CSS`, and `JavaScript`
+- CRUD operations 
+- Dynamic filtering using `JavaScript` and `Fetch API`
 
 ---
 
-## Project Purpose
+## 💡 Project Purpose
 
 The purpose of this Sales Dashboard project is to demonstrate how sales data can be collected, processed, stored, and displayed through a web application.
 
@@ -43,10 +45,11 @@ The project demonstrates practical use of:
 
 ---
 
-## Project Structure
+## 🏗️ Project Structure
 
+```
 sales_dashboard_project/
-
+│
 ├── data/
 │   └── closed_deals_01-01-17-04-2026.csv
 │
@@ -58,10 +61,11 @@ sales_dashboard_project/
 ├── deals.db
 ├── README.md
 └── .gitignore
+```
 
 ---
 
-## Technologies Used
+## ⚙️ Technologies Used
 
 - `Python`
 - `Flask`
@@ -69,10 +73,11 @@ sales_dashboard_project/
 - `Pandas`
 - `HTML/CSS`
 - `JavaScript`
+- `Fetch API`
 
 ---
 
-## Database Setup (create_db.py)
+## 📈 Database Setup (create_db.py)
 
 This script:
 
@@ -80,11 +85,11 @@ This script:
 - Converts dates to `datetime format`
 - Cleans currency values (€ and commas removed)
 - Converts amount fields to numeric
-- Handles missing values
+- Handles missing values with 0
 - Renames columns for SQL compatibility
 - Creates SQLite database (`deals.db`)
-- Inserts cleaned data into deals table
-- Removes "Closed Lost" deals
+- Inserts cleaned data into `deals` table
+- Removes `Closed Lost` deals
 
 Run:
 
@@ -92,7 +97,7 @@ python `create_db.py`
 
 ---
 
-## Flask API (app.py)
+## 🈸 Flask API (app.py)
 
 The Flask application provides RESTful endpoints:
 
@@ -118,20 +123,22 @@ curl -X PUT -H "Content-Type: application/json" -d "{\"close_date\":\"2026-05-01
 
 ---
 
-## Frontend (index.html)
+## 🌐 Frontend (index.html)
 
 The frontend dashboard allows users to:
 
-- Load all deals
+- Load all won deals from the database
 - Add a new deal
 - Delete a deal
 - Update a deal
 - View deal ID, name, and amount
 - Filter deals by traffic source using a dropdown
 
+The frontend uses JavaScript Fetch API to communicate with the Flask backend.
+
 ---
 
-## Key Functionality
+## 🧠 Key Functionality
 
 ### Dynamic Data Loading
 
@@ -139,7 +146,7 @@ Uses Fetch API to retrieve and display data from Flask backend.
 
 ### Data Cleaning
 
-Ensures numeric values are stored correctly to avoid null values.
+The CSV data is cleaned before insertion into the database to prevent formatting and null value issues.
 
 ### Traffic Source Filtering
 
@@ -151,31 +158,63 @@ Dropdown loads automatically using `window.onload`.
 
 ---
 
-## How to Run
+## 📊 Database Information
 
-1. Create database
+The SQLite database file is stored locally as:
+
+`deals.db`
+
+The database is automatically created when:
+
+`python` `create_db.py` is executed.
+
+The database contains one table:
+
+`deals`
+
+Columns:
+
+- close_date
+- deal_name
+- deal_id
+- deal_stage
+- amount
+- closed_amount
+- traffic_source
+
+---
+
+## 💻 How to Run
+
+1. Install required libraries
+
+`pip install pandas flask`
+
+2. Create database
 
 python `create_db.py`
 
-2. Start Flask server
+3. Start Flask server
 
 python `app.py`
 
-3. Open browser
+4. Open browser
 
 http://127.0.0.1:5000
 
 ---
 
-## Notes
+## 📝 Notes
 
 - Amount must be numeric (no € symbol in input)
-- Filtering is handled on frontend
-- Database is recreated when script runs
+- The database is recreated when `create_db.py` runs
+- Traffic source filtering is handled on the frontend using JavaScript
+- The dashboard communicates with Flask using Fetch API
+- Data is stored locally inside `deals.db`
 
 ---
 
-## References
+## 📚 References
 
 Flask
 - https://flask.palletsprojects.com
@@ -195,7 +234,8 @@ JavaScript DOM
 HTML/CSS
 - https://www.w3schools.com
 
-**Full list of references is provided with the code.**
+
+⚠️**Full list of references is provided with the code.**
 
 
 ## Author
