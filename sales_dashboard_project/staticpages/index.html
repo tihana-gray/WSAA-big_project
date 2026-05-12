@@ -170,6 +170,8 @@ function getDeals() {
 
         for (let i = 0; i < data.length; i++) {
 
+            // NEW: Displays deal_id and amount alongside deal_name
+            // This improves visibility of key deal information in the UI
             let li = document.createElement("li");
             li.innerText = data[i].deal_id + " - " + data[i].deal_name + " - €" + data[i].amount;
 
