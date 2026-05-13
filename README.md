@@ -47,7 +47,6 @@ The project demonstrates practical use of:
 
 ## 🏗️ Project Structure
 
-```
 sales_dashboard_project/
 │
 ├── data/
@@ -93,7 +92,7 @@ This script:
 
 Run:
 
-python `create_db.py`
+`python` `create_db.py`
 
 ---
 
@@ -103,23 +102,23 @@ The Flask application provides RESTful endpoints:
 
 ### GET all deals
 
-curl http://127.0.0.1:5000/deals
+`curl http://127.0.0.1:5000/deals`
 
 ### GET closed won deals
 
-curl http://127.0.0.1:5000/deals/closedwon
+`curl http://127.0.0.1:5000/deals/closedwon`
 
 ### POST new deal
 
-curl -X POST -H "Content-Type: application/json" -d "{\"close_date\":\"2026-05-01\",\"deal_name\":\"Test Deal\",\"deal_id\":123456,\"deal_stage\":\"Closed Won\",\"amount\":1000,\"closed_amount\":0,\"traffic_source\":\"Web\"}" http://127.0.0.1:5000/deals/add
+`curl -X POST -H "Content-Type: application/json" -d "{\"close_date\":\"2026-05-01\",\"deal_name\":\"Test Deal\",\"deal_id\":123456,\"deal_stage\":\"Closed Won\",\"amount\":1000,\"closed_amount\":0,\"traffic_source\":\"Web\"}" http://127.0.0.1:5000/deals/add`
 
 ### DELETE deal
 
-curl -X DELETE http://127.0.0.1:5000/deals/delete/123456
+`curl -X DELETE http://127.0.0.1:5000/deals/delete/123456`
 
 ### UPDATE deal
 
-curl -X PUT -H "Content-Type: application/json" -d "{\"close_date\":\"2026-05-01\",\"deal_name\":\"Updated Deal\",\"deal_stage\":\"Closed Won\",\"amount\":2000,\"closed_amount\":0,\"traffic_source\":\"Web\"}" http://127.0.0.1:5000/deals/update/123456
+`curl -X PUT -H "Content-Type: application/json" -d "{\"close_date\":\"2026-05-01\",\"deal_name\":\"Updated Deal\",\"deal_stage\":\"Closed Won\",\"amount\":2000,\"closed_amount\":0,\"traffic_source\":\"Web\"}" http://127.0.0.1:5000/deals/update/123456`
 
 ---
 
@@ -181,6 +180,19 @@ Columns:
 - amount
 - closed_amount
 - traffic_source
+
+### Managing the Database
+
+The project database can also be viewed and edited using:
+
+`DB Browser for SQLite`
+
+This allows records inside `deals.db` to be:
+
+- Viewed
+- Updated
+- Deleted manually
+- Queried using SQL
 
 ---
 

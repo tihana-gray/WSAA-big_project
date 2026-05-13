@@ -3,11 +3,14 @@ import sqlite3       # For SQLite databases
 import os            # To avoid file reading errors
 
 # File path
-file_path = os.path.join("data", "closed_deals_01-01-17-04-2026.csv")
+base_dir = os.path.dirname(os.path.abspath(__file__))
+file_path = os.path.join(base_dir, "data", "closed_deals_01-01-17-04-2026.csv")
 # 📚 References: 
 # https://www.geeksforgeeks.org/python/python-os-path-join-method/
 # https://docs.python.org/3/library/os.path.html
 # https://stackoverflow.com/questions/7132861/how-can-i-create-a-full-path-to-a-file-from-parts-e-g-path-to-the-folder-name
+# https://www.geeksforgeeks.org/python/python-os-path-abspath-method-with-example/
+# https://stackoverflow.com/questions/38412495/difference-between-os-path-dirnameos-path-abspath-file-and-os-path-dirnam
 
 # Loading CSV into DataFrame
 df = pd.read_csv(file_path)
@@ -63,7 +66,8 @@ df.columns = [
 # https://stackoverflow.com/questions/5461481/formatting-clear-and-readable-sql-queries
 
 # Connecting to SQLite database (creates file if it doesn't exist)
-conn = sqlite3.connect("deals.db")
+db_path = os.path.join(base_dir, "deals.db")
+conn = sqlite3.connect(db_path)
 # 📚 References:
 # https://docs.python.org/3/library/sqlite3.html
 # https://stackoverflow.com/questions/76571296/how-to-connect-to-sqlite-database-in-python
@@ -112,7 +116,8 @@ print(df.info())
 # --------------------------------
 
 # Reconnecting to the database
-conn = sqlite3.connect("deals.db")
+db_path = os.path.join(base_dir, "deals.db")
+conn = sqlite3.connect(db_path)
 
 # Creating cursor to execute SQL queries
 cursor = conn.cursor()
@@ -150,7 +155,8 @@ conn.close()
 # --------------------------------
 
 # Reconnecting to database
-conn = sqlite3.connect("deals.db")
+db_path = os.path.join(base_dir, "deals.db")
+conn = sqlite3.connect(db_path)
 cursor = conn.cursor()
 
 # SQL query to filter only "Closed Won" deals
@@ -181,8 +187,9 @@ for row in results[:5]:
 # Removing 'Closed Lost' deals from database:
 # -------------------------------------------
 
-# Reconnecting 
-conn = sqlite3.connect("deals.db")
+# Reconnecting
+db_path = os.path.join(base_dir, "deals.db")
+conn = sqlite3.connect(db_path)
 cursor = conn.cursor()
 
 # SQL query to delete all "Closed Lost" deals
