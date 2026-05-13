@@ -47,6 +47,7 @@ The project demonstrates practical use of:
 
 ## 🏗️ Project Structure
 
+```text
 sales_dashboard_project/
 │
 ├── data/
